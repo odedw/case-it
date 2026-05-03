@@ -1,3 +1,31 @@
+# caseIt
+
+A simple web tool for text case transformations — UPPER CASE, lower case, PascalCase, camelCase. Designed to work with keyboard shortcuts.
+
+**Live:** https://odedw.github.io/case-it/
+
+## Stack
+
+Vite · React 18 · TypeScript · Tailwind CSS v4 · Playwright. Deployed to GitHub Pages via Actions.
+
+The original 2014 C# MVC version lives in [`legacy/`](./legacy) for posterity.
+
+## Develop
+
+```sh
+npm install
+npm run dev       # local dev server
+npm run build     # production build to dist/
+npm run preview   # serve the built bundle
+npm test          # Playwright E2E tests
+```
+
+## Keyboard shortcuts
+
+- `Alt+1..4` — UPPER CASE / lower case / Pascal Case / camel Case
+- `Cmd/Ctrl+V` anywhere on the page — paste into the textarea
+- `Cmd/Ctrl+C` anywhere on the page — copy the textarea contents
+
 ## License
 
 All libraries code is licensed under the corresponding library's license.

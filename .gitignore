@@ -1,4 +1,24 @@
+# Node / Vite
+node_modules
+dist
+*.local
+.cache
+*.tsbuildinfo
+
+# Playwright
+test-results
+playwright-report
+blob-report
+.playwright
+
+# OS / editors
+.DS_Store
 Thumbs.db
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Legacy C# project artifacts
 *.obj
 *.pdb
 *.user
@@ -13,7 +33,6 @@ Thumbs.db
 *.tlb
 *.tlh
 *.bak
-*.cache
 *.ilk
 *.log
 [Bb]in
@@ -26,6 +45,4 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.vssscc
 $tf*/
-
-# packages
 packages/
