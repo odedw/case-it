@@ -79,6 +79,25 @@ test.describe('caseIt', () => {
     await expect(textarea).toHaveValue('HELLO WORLD');
   });
 
+  // On macOS, Option+1..4 doesn't produce "1".."4" — it produces special
+  // characters (¡, ™, £, ¢). Simulate that to make sure our shortcut handler
+  // keys off e.code (physical key) rather than e.key.
+  test('Mac Option+digit shortcut still works when e.key is a special char', async ({ page }) => {
+    const textarea = page.getByRole('textbox', { name: 'Text to transform' });
+    await textarea.fill('hello world');
+    await page.evaluate(() => {
+      window.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: '£', // what Option+3 actually produces on a Mac US layout
+          code: 'Digit3',
+          altKey: true,
+          bubbles: true,
+        }),
+      );
+    });
+    await expect(textarea).toHaveValue('Hello World');
+  });
+
   test('About dialog opens and closes', async ({ page }) => {
     // Use attribute selector — getByRole filters out aria-hidden elements
     const dialog = page.locator('[aria-label="About caseIt"]');

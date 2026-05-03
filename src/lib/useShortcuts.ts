@@ -1,11 +1,13 @@
 import { useEffect, RefObject } from 'react';
 import type { CaseType } from './caseUtils';
 
-const altKeyToCase: Record<string, CaseType> = {
-  '1': 'upper',
-  '2': 'lower',
-  '3': 'pascal',
-  '4': 'camel',
+// Use e.code (physical key) rather than e.key — on Mac, Option+1 produces "¡",
+// Option+2 produces "™", etc., so e.key is unreliable for Alt combos.
+const altCodeToCase: Record<string, CaseType> = {
+  Digit1: 'upper',
+  Digit2: 'lower',
+  Digit3: 'pascal',
+  Digit4: 'camel',
 };
 
 interface Options {
@@ -19,10 +21,10 @@ export function useShortcuts({ textareaRef, onTransform, enabled }: Options) {
     if (!enabled) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Alt+1..4 → transform
-      if (e.altKey && altKeyToCase[e.key]) {
+      // Alt/Option + 1..4 → transform
+      if (e.altKey && altCodeToCase[e.code]) {
         e.preventDefault();
-        onTransform(altKeyToCase[e.key]);
+        onTransform(altCodeToCase[e.code]);
         return;
       }
 
@@ -34,11 +36,11 @@ export function useShortcuts({ textareaRef, onTransform, enabled }: Options) {
 
       // Cmd/Ctrl+V or Cmd/Ctrl+C anywhere on the page → focus the textarea
       // and select its content so the browser's native paste/copy works on it.
-      if ((e.key === 'v' || e.key === 'V' || e.key === 'c' || e.key === 'C') && !isInTextarea) {
+      if ((e.code === 'KeyV' || e.code === 'KeyC') && !isInTextarea) {
         const ta = textareaRef.current;
         if (!ta) return;
         ta.focus();
-        if (e.key === 'c' || e.key === 'C') {
+        if (e.code === 'KeyC') {
           ta.select();
         }
       }
