@@ -4,6 +4,8 @@ dist
 *.local
 .cache
 *.tsbuildinfo
+bun.lock
+bun.lockb
 
 # Playwright
 test-results

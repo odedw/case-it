@@ -7,7 +7,7 @@ test.describe('caseIt', () => {
 
   test('page loads with title and header', async ({ page }) => {
     await expect(page).toHaveTitle('caseIt | For all of your casing needs');
-    await expect(page.getByText('caseIt', { exact: true })).toBeVisible();
+    await expect(page.getByRole('banner').getByText('caseIt', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'About' })).toBeVisible();
   });
 
@@ -98,7 +98,7 @@ test.describe('caseIt', () => {
     await expect(textarea).toHaveValue('Hello World');
   });
 
-  test('About dialog opens and closes', async ({ page }) => {
+  test('About dialog opens, links to repo, and closes', async ({ page }) => {
     // Use attribute selector — getByRole filters out aria-hidden elements
     const dialog = page.locator('[aria-label="About caseIt"]');
 
@@ -106,10 +106,18 @@ test.describe('caseIt', () => {
 
     await page.getByRole('button', { name: 'About' }).click();
     await expect(dialog).toHaveAttribute('aria-hidden', 'false');
-    await expect(dialog.getByText('caseIt Is')).toBeVisible();
-    await expect(dialog.getByText('caseIt Was Created')).toBeVisible();
-    const githubLink = dialog.getByRole('link', { name: 'developer' });
-    await expect(githubLink).toHaveAttribute('href', 'https://github.com/OdedW');
+
+    await expect(dialog.getByRole('heading', { name: 'caseIt' })).toBeVisible();
+    await expect(
+      dialog.getByText(/keyboard-first tool for converting text/i),
+    ).toBeVisible();
+
+    const repoLink = dialog.getByRole('link', { name: /view on github/i });
+    await expect(repoLink).toHaveAttribute('href', 'https://github.com/odedw/case-it');
+    await expect(repoLink).toHaveAttribute('target', '_blank');
+
+    // Full name should not appear anywhere in the dialog
+    await expect(dialog.getByText(/Welgreen/)).toHaveCount(0);
 
     // Close via the X button
     await dialog.getByRole('button', { name: 'Close' }).click();
